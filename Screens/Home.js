@@ -18,7 +18,7 @@ import {
  Button,
  TouchableOpacity,
 } from 'react-native';
-import MapView, { MAP_TYPES, ProviderPropType } from 'react-native-maps';
+import MapView, { MAP_TYPES, ProviderPropType, Callout } from 'react-native-maps';
 import List from '../Screens/Components/List';
 
 const { Marker } = MapView;
@@ -173,6 +173,7 @@ export default class Home extends Component {
     if (this.state.selection === false) {
       this.setState({ selection: true });
       this.setState({ chosenLocation: place });
+      console.log(this.state.chosenLocation);
       if (this.state.chosenLocation) {
 
         this.goToPlace(this.state.chosenLocation.latlng);
@@ -251,8 +252,10 @@ export default class Home extends Component {
     const winchMarker = ({type}) => (
       <View style={[styles.marker, styles['${type}Marker']]}>
         {type === 'Attractions' ?
-          <Text>A</Text>
-        : <Text>C</Text>
+          <View style={styles.attractions}>
+            <Text style={{color: 'white', fontWeight: 'bold'}}>A</Text>
+          </View>
+        : <View style={styles.commercial}><Text style={{color: 'white', fontWeight: 'bold'}}>C</Text></View>
         }
       </View>
     )
@@ -272,8 +275,14 @@ export default class Home extends Component {
             <Marker
               key={marker.id}
               coordinate={marker.latlng}
+
             >
               {winchMarker(marker)}
+              <Callout onPress={() => this.focusHandler(marker)} style={styles.plainView}>
+                <View>
+                  <Text>{marker.name}</Text>
+                </View>
+              </Callout>
             </Marker>
           ))}
         </MapView>
@@ -286,13 +295,8 @@ export default class Home extends Component {
     if (!selection) {
       return (
         <View style={styles.locations}>
-          <ScrollView horizontal={true}>
-            <List name="Locations" list={locations} handler={this.focusHandler} />
-          </ScrollView>
-
-          <ScrollView horizontal={true}>
-            <List name="Trails" list={trails} handler={this.focusHandler} />
-          </ScrollView>
+          <List name="Locations" list={locations} handler={this.focusHandler} />
+          <List name="Trails" list={trails} handler={this.focusHandler} />
         </View>
       )
     }
@@ -309,8 +313,13 @@ export default class Home extends Component {
                 <Text>{chosenLocation.type}</Text>
                 <TouchableOpacity
                   style={styles.ARButton}
-                  onPress={() => this.props.navigation.navigate('ARContent')}
-                ><Text style={styles.buttonTxt}>Go to AR Content</Text>
+                  onPress={() => this.props.navigation.navigate('ARContent', {
+                    location: chosenLocation.name,
+                    otherParam: 'anything you want here',
+                  })
+                  }
+                >
+                  <Text style={styles.buttonTxt}>Go to AR Content</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -389,6 +398,25 @@ export default class Home extends Component {
    map: {
      flex: 1,
    },
+   attractions: {
+     backgroundColor: 'green',
+     borderRadius: 100,
+     borderColor: 'white',
+     borderWidth: 3,
+     paddingHorizontal: 6,
+     paddingVertical: 3,
+   },
+   commercial: {
+     backgroundColor: 'red',
+     borderRadius: 100,
+     borderColor: 'white',
+     borderWidth: 3,
+     paddingHorizontal: 6,
+     paddingVertical: 3,
+   },
+   plainView: {
+    width: 100,
+  },
    focusContainer: {
      flex: 1,
      paddingHorizontal: 14,

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, TouchableHighlight, Image, Text, Dimensions } from 'react-native';
 import { ViroARSceneNavigator } from 'react-viro';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 // import { VIROAPIKEY } from 'react-native-dotenv';
 
@@ -37,6 +39,7 @@ const states = {
 };
 
 class MainScene extends Component {
+
     state = {
         appState: states.MENU,
     };
@@ -62,7 +65,7 @@ class MainScene extends Component {
           <TouchableHighlight onPress={this.handleSetAppState(states.PLAY)}>
             <View style={styles.playButton}>
 
-              <Text style={{ fontSize: 30 }}>MADAMOT PLAY</Text>
+              <Text style={{ fontSize: 30 }}>{JSON.stringify(this.props.navigation.getParam('location', 'NO-ID'))}</Text>
             </View>
           </TouchableHighlight>
           {/* <TouchableHighlight onPress={this.handleSetAppState(states.PLAYPORTAL)}>

@@ -16,19 +16,30 @@ import {
        <View style={listStyles.loconatiner}>
          <View style={listStyles.contentcontainer}>
            <Text style={listStyles.locTitle}>{listItem.name}</Text>
-           <View style={listStyles.content}>
-             {listItem.list.map(place =>
-               <TouchableOpacity onPress={() => listItem.handler(place)} key={place.id}>
-                 <View style={listStyles.place}>
-                   <Image
-                     style={{width: 50, height: 50, borderRadius: 25,}}
-                     source={{uri: place.image}}
-                   />
-                   <Text>{place.name}</Text>
-                 </View>
-               </TouchableOpacity>
-             )}
-           </View>
+           <View
+             style={{
+               borderBottomColor: 'grey',
+               borderBottomWidth: 0.3,
+             }}
+           />
+           <ScrollView
+             horizontal={true}
+             showsHorizontalScrollIndicator={false}
+           >
+             <View style={listStyles.content}>
+               {listItem.list.map(place =>
+                 <TouchableOpacity onPress={() => listItem.handler(place)} key={place.id}>
+                   <View style={listStyles.place}>
+                     <Image
+                       style={{width: 50, height: 50, borderRadius: 25,}}
+                       source={{uri: place.image}}
+                     />
+                     <Text>{place.name}</Text>
+                   </View>
+                 </TouchableOpacity>
+               )}
+             </View>
+           </ScrollView>
          </View>
        </View>
      );
@@ -38,16 +49,14 @@ import {
  const listStyles = StyleSheet.create({
    loconatiner: {
      backgroundColor: '#fff',
-     borderWidth: 0.5,
-     borderColor: '#d6d7da',
    },
    contentcontainer: {
-     paddingHorizontal: 14,
+     paddingLeft: 14,
      paddingVertical: 4,
    },
    content: {
      paddingHorizontal: 14,
-     paddingVertical: 12,
+     paddingTop: 10,
      flex: 1,
      flexDirection: 'row',
      alignItems: 'center',
@@ -59,8 +68,9 @@ import {
      alignItems: 'center',
    },
    locTitle: {
-     fontWeight: 'bold',
+     paddingTop: 14,
      marginBottom: 10,
+
    },
 });
 
