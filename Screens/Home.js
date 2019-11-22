@@ -19,6 +19,7 @@ import {
  TouchableOpacity,
 } from 'react-native';
 import MapView, { MAP_TYPES, ProviderPropType, Callout } from 'react-native-maps';
+import * as axios from 'axios';
 import List from '../Screens/Components/List';
 
 const { Marker } = MapView;
@@ -35,12 +36,8 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
         type: 'Attractions',
         name: 'Cathedral',
         image: 'https://www.winchester-cathedral.org.uk/wp-content/uploads/Winchester-074-23102013-A4.jpg',
-        latlng: {
-          latitude: 51.060891,
-          longitude: -1.313165,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        }
+        latitude: 51.060891,
+        longitude: -1.313165,
       },
       {
         id: 2,
@@ -107,8 +104,11 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
       },
       ]
 
-
 export default class Home extends Component {
+  // componentDidMount = () => {
+  //   this.getLocations();
+  // }
+
   static navigationOptions = {
     header: null,
   };
@@ -126,6 +126,24 @@ export default class Home extends Component {
     trails: trails,
     chosenLocation: "",
   }
+
+
+  //   getLocations() {
+  //   //   axios.get("http://127.0.0.1:8000/api/v1/")
+  //   //   .then((response) => {
+  //   //   console.log(response.data);
+  //   // })
+  //   axios
+  //     .get('http://127.0.0.1:8000/api/v1/')
+  //     .then(res => {
+  //       this.setState({ locations: res.data })
+  //       console.log(this.state.locations);
+  //     })
+  //     .catch(err => {
+  //       console.log("oh no");
+  //     });
+  // }
+
 
   onRegionChange(region) {
     this.setState({ region });
@@ -275,7 +293,6 @@ export default class Home extends Component {
             <Marker
               key={marker.id}
               coordinate={marker.latlng}
-
             >
               {winchMarker(marker)}
               <Callout onPress={() => this.focusHandler(marker)} style={styles.plainView}>
