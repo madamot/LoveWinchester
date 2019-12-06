@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import MapView, { MAP_TYPES, ProviderPropType, Callout } from 'react-native-maps';
 import * as axios from 'axios';
+import BottomDrawer from 'rn-bottom-drawer';
 import List from '../Screens/Components/List';
 
 const { Marker } = MapView;
@@ -29,6 +30,7 @@ const LATITUDE = 51.064022;
 const LONGITUDE = -1.316288;
 const LATITUDE_DELTA = 0.0322;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const TAB_BAR_HEIGHT = 49;
 
     // const locations = [
     //   {
@@ -369,9 +371,15 @@ export default class Home extends Component {
        <SafeAreaView style={styles.container}>
          {this.renderHeader()}
          {this.renderMap()}
-         <ScrollView style={styles.container}>
-           {this.renderList()}
-         </ScrollView>
+         <BottomDrawer
+           containerHeight={500}
+           offset={TAB_BAR_HEIGHT}
+           startUp={false}
+         >
+           <ScrollView>
+             {this.renderList()}
+           </ScrollView>
+         </BottomDrawer>
        </SafeAreaView>
      );
    }

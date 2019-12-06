@@ -17,7 +17,8 @@
     "react-native-screens": "^1.0.0-alpha.23",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3",
-    "react-viro": "2.17.0"
+    "react-viro": "2.17.0",
+    "rn-bottom-drawer": "^1.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
