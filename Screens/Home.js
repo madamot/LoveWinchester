@@ -30,46 +30,46 @@ const LONGITUDE = -1.316288;
 const LATITUDE_DELTA = 0.0322;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-    const locations = [
-      {
-        id: 1,
-        type: 'Attractions',
-        name: 'Cathedral',
-        image: 'https://www.winchester-cathedral.org.uk/wp-content/uploads/Winchester-074-23102013-A4.jpg',
-        latitude: 51.060891,
-        longitude: -1.313165,
-      },
-      {
-        id: 2,
-        type: 'Attractions',
-        name: 'Great Hall',
-        image: 'https://thecrestdroxfordholidays.com/wp-content/uploads/2018/09/Winchester-Great-Hall.png',
-        latlng: {
-          latitude: 51.062759,
-          longitude: -1.319771,
-        }
-      },
-      {
-        id: 3,
-        type: 'Attractions',
-        name: 'St Alfred',
-        image: 'https://www.historic-uk.com/wp-content/uploads/2017/04/king-alfred-and-the-cakes.jpg',
-        latlng: {
-          latitude: 51.061520,
-          longitude: -1.309099,
-        }
-      },
-      {
-        id: 4,
-        type: 'Commercial',
-        name: 'Weatherspoons',
-        image: 'https://www.historic-uk.com/wp-content/uploads/2017/04/king-alfred-and-the-cakes.jpg',
-        latlng: {
-          latitude: 51.064042,
-          longitude: -1.316191,
-        }
-      },
-      ]
+    // const locations = [
+    //   {
+    //     id: 1,
+    //     type: 'Attractions',
+    //     name: 'Cathedral',
+    //     image: 'https://www.winchester-cathedral.org.uk/wp-content/uploads/Winchester-074-23102013-A4.jpg',
+    //     latitude: 51.060891,
+    //     longitude: -1.313165,
+    //   },
+    //   {
+    //     id: 2,
+    //     type: 'Attractions',
+    //     name: 'Great Hall',
+    //     image: 'https://thecrestdroxfordholidays.com/wp-content/uploads/2018/09/Winchester-Great-Hall.png',
+    //     latlng: {
+    //       latitude: 51.062759,
+    //       longitude: -1.319771,
+    //     }
+    //   },
+    //   {
+    //     id: 3,
+    //     type: 'Attractions',
+    //     name: 'St Alfred',
+    //     image: 'https://www.historic-uk.com/wp-content/uploads/2017/04/king-alfred-and-the-cakes.jpg',
+    //     latlng: {
+    //       latitude: 51.061520,
+    //       longitude: -1.309099,
+    //     }
+    //   },
+    //   {
+    //     id: 4,
+    //     type: 'Commercial',
+    //     name: 'Weatherspoons',
+    //     image: 'https://www.historic-uk.com/wp-content/uploads/2017/04/king-alfred-and-the-cakes.jpg',
+    //     latlng: {
+    //       latitude: 51.064042,
+    //       longitude: -1.316191,
+    //     }
+    //   },
+    //   ]
 
     const trails = [
       {
@@ -105,9 +105,9 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
       ]
 
 export default class Home extends Component {
-  // componentDidMount = () => {
-  //   this.getLocations();
-  // }
+  componentDidMount = () => {
+    this.getLocations();
+  }
 
   static navigationOptions = {
     header: null,
@@ -121,28 +121,27 @@ export default class Home extends Component {
         longitudeDelta: LONGITUDE_DELTA,
       },
     active: 'all',
+    tabFilter: [],
     selection: false,
-    locations: locations,
+    locations: [],
     trails: trails,
     chosenLocation: "",
   }
 
 
-  //   getLocations() {
-  //   //   axios.get("http://127.0.0.1:8000/api/v1/")
-  //   //   .then((response) => {
-  //   //   console.log(response.data);
-  //   // })
-  //   axios
-  //     .get('http://127.0.0.1:8000/api/v1/')
-  //     .then(res => {
-  //       this.setState({ locations: res.data })
-  //       console.log(this.state.locations);
-  //     })
-  //     .catch(err => {
-  //       console.log("oh no");
-  //     });
-  // }
+    getLocations() {
+    axios
+      .get('http://127.0.0.1:8000/api/v1/')
+      .then(res => {
+        this.setState({ locations: res.data })
+        this.setState({ tabFilter: res.data })
+        console.log(this.state.locations);
+      })
+      .catch(err => {
+        console.log("oh no");
+      });
+
+  }
 
 
   onRegionChange(region) {
@@ -150,25 +149,40 @@ export default class Home extends Component {
   }
 
   handleTab = (tabKey) => {
-    let newLocations = locations;
-
-    if (tabKey !== 'all') {
-      newLocations = locations.filter(locations => locations.type === tabKey);
+    const newLocations = this.state.locations;
+    //
+    // if (tabKey !== 'all') {
+    //   newLocations = this.state.locations.filter(locations => locations.type === tabKey);
+    //   this.setState({ active: tabKey, locations: newLocations });
+    // }
+    //
+    // this.setState({ active: tabKey, locations: newLocations });
+    // console.log(newLocations);
+    if (tabKey == 'all') {
+      this.getLocations();
+      this.setState({ active: tabKey });
     }
+    else if (tabKey == 'Attraction') {
 
-    this.setState({ active: tabKey, locations: newLocations });
-    // console.log(this.state.active);
+      tabFilter = this.state.locations.filter(locations => locations.type === tabKey);
+      this.setState({ active: tabKey, tabFilter: tabFilter });
+    }
+    else if (tabKey == 'Commercial') {
+
+      tabFilter = this.state.locations.filter(locations => locations.type === tabKey);
+        this.setState({ active: tabKey, tabFilter: tabFilter });
+    }
   }
 
 
-  goToPlace(location) {
+  goToPlace(latitude, longitude) {
     const chosenLocation = this.state.latlng;
     this.map.animateCamera({ center: {
       latitude:
-        location.latitude,
+        latitude,
       longitude:
-        location.longitude
-      }
+        longitude
+    }
     });
   }
 
@@ -194,7 +208,7 @@ export default class Home extends Component {
       console.log(this.state.chosenLocation);
       if (this.state.chosenLocation) {
 
-        this.goToPlace(this.state.chosenLocation.latlng);
+        this.goToPlace(this.state.chosenLocation.latitude, this.state.chosenLocation.longitude);
       }
     } else {
       this.setState({ selection: false });
@@ -240,13 +254,13 @@ export default class Home extends Component {
             All
           </Text>
         </View>
-        <View style={[styles.tab, active === 'Attractions' ? styles.activeTab : null ]}>
+        <View style={[styles.tab, active === 'Attraction' ? styles.activeTab : null ]}>
           <Text
             style={[
               styles.tabTitle,
               active === 'attractions' ? styles.activeTabTitle : null
             ]}
-            onPress={() => this.handleTab('Attractions')}
+            onPress={() => this.handleTab('Attraction')}
           >
             Attractions
           </Text>
@@ -269,7 +283,7 @@ export default class Home extends Component {
   renderMap() {
     const winchMarker = ({type}) => (
       <View style={[styles.marker, styles['${type}Marker']]}>
-        {type === 'Attractions' ?
+        {type === 'Attraction' ?
           <View style={styles.attractions}>
             <Text style={{color: 'white', fontWeight: 'bold'}}>A</Text>
           </View>
@@ -289,10 +303,13 @@ export default class Home extends Component {
           initialRegion={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
         >
-          {this.state.locations.map(marker => (
+          {this.state.tabFilter.map(marker => (
             <Marker
               key={marker.id}
-              coordinate={marker.latlng}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude
+              }}
             >
               {winchMarker(marker)}
               <Callout onPress={() => this.focusHandler(marker)} style={styles.plainView}>
@@ -308,11 +325,11 @@ export default class Home extends Component {
   }
 
   renderList() {
-    const { locations, trails, selection, chosenLocation } = this.state;
+    const { locations, trails, selection, chosenLocation, tabFilter } = this.state;
     if (!selection) {
       return (
         <View style={styles.locations}>
-          <List name="Locations" list={locations} handler={this.focusHandler} />
+          <List name="Locations" list={tabFilter} handler={this.focusHandler} />
           <List name="Trails" list={trails} handler={this.focusHandler} />
         </View>
       )
@@ -338,6 +355,7 @@ export default class Home extends Component {
                 >
                   <Text style={styles.buttonTxt}>Go to AR Content</Text>
                 </TouchableOpacity>
+                <Text>{chosenLocation.description}</Text>
               </View>
             </View>
           </View>
