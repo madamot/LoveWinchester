@@ -18,7 +18,7 @@ import {
  Button,
  TouchableOpacity,
 } from 'react-native';
-import MapView, { MAP_TYPES, ProviderPropType, Callout } from 'react-native-maps';
+import MapView, { MAP_TYPES, PROVIDER_GOOGLE, Callout } from 'react-native-maps';
 import * as axios from 'axios';
 import BottomDrawer from 'rn-bottom-drawer';
 import List from '../Screens/Components/List';
@@ -296,7 +296,7 @@ export default class Home extends Component {
     return (
       <View style={styles.map}>
         <MapView
-          provider={this.props.provider}
+          provider={PROVIDER_GOOGLE}
           ref={ref => {
             this.map = ref;
           }}
