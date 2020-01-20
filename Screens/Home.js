@@ -300,7 +300,7 @@ export default class Home extends Component {
           ref={ref => {
             this.map = ref;
           }}
-          style={{flex: 1, height: height * 0.5, width,}}
+          style={{flex: 1, height: height, width,}}
           showsMyLocationButton={true}
           initialRegion={this.state.region}
           onRegionChange={region => this.onRegionChange(region)}
@@ -330,10 +330,12 @@ export default class Home extends Component {
     const { locations, trails, selection, chosenLocation, tabFilter } = this.state;
     if (!selection) {
       return (
+
         <View style={styles.locations}>
           <List name="Locations" list={tabFilter} handler={this.focusHandler} />
           <List name="Trails" list={trails} handler={this.focusHandler} />
         </View>
+
       )
     }
     else {
@@ -372,7 +374,7 @@ export default class Home extends Component {
          {this.renderHeader()}
          {this.renderMap()}
          <BottomDrawer
-           containerHeight={500}
+           containerHeight={300}
            offset={TAB_BAR_HEIGHT}
            startUp={false}
          >
